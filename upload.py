@@ -12,7 +12,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.4"
+CURRENT_VERSION = "1.0.5"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -121,8 +121,6 @@ def createRecord(productId, filename):
     return True
 
 def main():
-    discord("İşleniyor...")
-    return
     files = readAllFilesOnDir(EXPORT_PATH)
     for file in files:
         isUploaded = checkIfUploaded(file)
