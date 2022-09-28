@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import os
 import random
-from venv import create
 import requests
 import datetime
 import subprocess
@@ -12,12 +11,13 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.0"
+CURRENT_VERSION = "1.0.1"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
 DISCORD_INFO_CHANNEL = os.getenv('DISCORD_INFO_CHANNEL')
 DISCORD_BOT_NAME = os.getenv('DISCORD_BOT_NAME')
+UPLOAD_SERVER_LINK_PATH = os.getenv('UPLOAD_SERVER_LINK_PATH')
 UPLOAD_SERVER_INFO = os.getenv('UPLOAD_SERVER_INFO')
 UPLOAD_SERVER_PATH = os.getenv('UPLOAD_SERVER_PATH')
 UPLOAD_SERVER_PORT = os.getenv('UPLOAD_SERVER_PORT')
@@ -40,9 +40,6 @@ def discord(msg, url=DISCORD_INFO_CHANNEL):
         result.raise_for_status()
     except requests.exceptions.HTTPError as err:
         # print(err)
-        pass
-    else:
-        # print("Discord mesajı başarıyla gönderildi., code {}.".format(result.status_code))
         pass
 
 def generateRandomString(stringLength=10):
@@ -77,7 +74,7 @@ def uploadFile(filename):
 
     productNumber = filename.split("__")[1]
     productNumber = productNumber.split(".")[0]
-    imagePathForDB = "/uploads/studios_auto_upload/"+ filename
+    imagePathForDB = UPLOAD_SERVER_LINK_PATH + filename
 
     try:
         command = "scp -i {} -P {} {} {}:{}{}".format(SSH_KEY_PATH, UPLOAD_SERVER_PORT, imageFilePath, UPLOAD_SERVER_INFO, UPLOAD_SERVER_PATH, filename)
@@ -134,8 +131,6 @@ def main():
         else:
             if(getFilename(file).endswith(".jpg")):
                 uploadFile(getFilename(file))
-
-    # discord("Test mesajı")
 
 def checkForUpdates():
     return True
