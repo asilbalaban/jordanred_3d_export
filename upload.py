@@ -11,7 +11,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.1"
+CURRENT_VERSION = "1.0.2"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -69,9 +69,7 @@ def getFilename(filepath):
     return os.path.basename(filepath)
 
 def uploadFile(filename):
-    print("Uploading file: {}".format(filename))
     imageFilePath = os.path.join(EXPORT_PATH, filename)
-
     productNumber = filename.split("__")[1]
     productNumber = productNumber.split(".")[0]
     imagePathForDB = UPLOAD_SERVER_LINK_PATH + filename
