@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import re
 import random
 import requests
 import datetime
@@ -11,7 +12,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.2"
+CURRENT_VERSION = "1.0.3"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -120,6 +121,8 @@ def createRecord(productId, filename):
     return True
 
 def main():
+    discord("İşleniyor...")
+    return
     files = readAllFilesOnDir(EXPORT_PATH)
     for file in files:
         isUploaded = checkIfUploaded(file)
@@ -131,14 +134,34 @@ def main():
                 uploadFile(getFilename(file))
 
 def checkForUpdates():
-    return True
+    url = "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/upload.py"
+    r = requests.get(url)
+    if(r.status_code == 200):
+        pattern = 'CURRENT_VERSION = "(.*?)"'
+        version = re.findall(pattern, r.text)
+        if(version[0] != CURRENT_VERSION):
+            update()
 
 def update():
-    print("Updating...")
+    urls = [
+        "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/upload.py",
+        "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/requirements.txt",
+        "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/config.env.example",
+        "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/_generate_3D.jsx"
+    ]
+
+    for url in urls:
+        filename = url.split("/")[-1]
+        r = requests.get(url)
+        if(r.status_code == 200):
+            with open(filename, "w") as f:
+                f.write(r.text)
+                f.close()
+
+    discord("Güncelleme yapıldı, lütfen tekrar çalıştırın.")
+    subprocess.Popen(CURRENT_PATH +"/upload.py", shell=True)
+
 
 if __name__ == "__main__":
-    if(checkForUpdates() == True):
-        update()
-    else:
-        main()
-
+    checkForUpdates()
+    main()
