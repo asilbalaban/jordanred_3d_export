@@ -158,7 +158,6 @@ def update():
                 f.write(r.text)
                 f.close()
 
-    discord("Güncelleme yapıldı, lütfen tekrar çalıştırın.")
     subprocess.Popen(CURRENT_PATH +"/upload.py", shell=True)
 
 
