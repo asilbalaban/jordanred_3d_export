@@ -1,8 +1,5 @@
-﻿
-// 3D sunum için export scripti
+﻿// Adobe Illustrator Export (3D sunum için export scripti)
 var document = app.activeDocument;
-
-
 productId = app.activeDocument.textFrames.getByName("productId").contents
 
 var exportOptions = new ExportOptionsJPEG();
@@ -25,6 +22,5 @@ document.exportFile(File("~/asilme/jordanred_3d_export/folder_export/"+date_time
 
 var runFile = File("~/asilme/jordanred_3d_export/upload.py")
 runFile.execute();
-
 
 // alert("Başarılı bir şekilde kaydedildi.");
