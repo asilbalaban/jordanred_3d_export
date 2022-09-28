@@ -13,7 +13,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.7"
+CURRENT_VERSION = "1.0.8"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -93,16 +93,38 @@ def uploadFile(filename):
     newPath = os.path.join(UPLOAD_PATH, replace)
     os.rename(imageFilePath, newPath)
 
+def getCurrentSlugFromDB(productId):
+    cnx = mysql.connector.connect(user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT, database=DB_NAME)
+    cursor = cnx.cursor()
+    query = ("SELECT current_slug FROM products WHERE id = {}".format(productId))
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    if(result == None or result[0] == None):
+        return ''
+
+    return result[0]
+
 def createRecord(productId, filename):
     salt = generateRandomString(8)
     zipperColor = "0xffffff"
     currentDatetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    currentSlug = getCurrentSlugFromDB(productId)
+
+    if(currentSlug == ''):
+        glbThin = None
+        glbThick = None
+    else:
+        glbThin = currentSlug + "_thin"
+        glbThick = currentSlug + "_thick"
 
     try:
         conn = mysql.connector.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, database=DB_NAME)
         cursor = conn.cursor()
-        query = "INSERT INTO `studios` (`salt`, `uv_map`, `product_id`, `zipper_color`, `created_at`, `updated_at`) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (salt, filename, productId, zipperColor, currentDatetime, currentDatetime))
+        query = "INSERT INTO `studios` (`salt`, `uv_map`, `product_id`, `zipper_color`, `created_at`, `updated_at`, `glb_thin`, `glb_thick`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (salt, filename, productId, zipperColor, currentDatetime, currentDatetime, glbThin, glbThick))
         conn.commit()
 
         cursor.close()

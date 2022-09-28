@@ -7,7 +7,8 @@ exportOptions.artBoardClipping = true;
 exportOptions.antiAliasing = true;
 exportOptions.qualitySetting = 100;
 
-scaleTo = 24.91
+// scaleTo = 24.91 // 145cm / 24.91 = 1024px
+scaleTo = 22.86; // 158cm / 22.86 = 1024px
 if (scaleTo) {
     exportOptions.verticalScale = scaleTo;
     exportOptions.horizontalScale = scaleTo;
