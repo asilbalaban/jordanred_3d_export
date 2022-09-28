@@ -12,7 +12,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.3"
+CURRENT_VERSION = "1.0.4"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -159,6 +159,7 @@ def update():
                 f.close()
 
     subprocess.Popen(CURRENT_PATH +"/upload.py", shell=True)
+    exit()
 
 
 if __name__ == "__main__":
