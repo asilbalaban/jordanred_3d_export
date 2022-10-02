@@ -13,7 +13,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.8"
+CURRENT_VERSION = "1.0.9"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 

@@ -1,4 +1,4 @@
-﻿// Adobe Illustrator Export (3D sunum için export scripti)
+﻿// Adobe Illustrator Export (3D sunum için export scripti) 2
 var document = app.activeDocument;
 productId = app.activeDocument.textFrames.getByName("productId").contents
 
