@@ -13,7 +13,7 @@ from mysql.connector import errorcode
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXPORT_PATH = os.path.join(CURRENT_PATH, "folder_export")
 UPLOAD_PATH = os.path.join(CURRENT_PATH, "folder_upload")
-CURRENT_VERSION = "1.0.9"
+CURRENT_VERSION = "1.0.10"
 
 load_dotenv(os.path.join(CURRENT_PATH, 'config.env'))
 
@@ -161,9 +161,11 @@ def checkForUpdates():
         pattern = 'CURRENT_VERSION = "(.*?)"'
         version = re.findall(pattern, r.text)
         if(version[0] != CURRENT_VERSION):
+            print("Şimdiki versiyon: {} - Güncel versiyon: {}".format(CURRENT_VERSION, version[0]))
             update()
 
 def update():
+    print("Yeni bir güncelleme mevcut. Güncelleme yapılıyor...")
     urls = [
         "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/upload.py",
         "https://raw.githubusercontent.com/asilbalaban/jordanred_3d_export/master/requirements.txt",
@@ -175,7 +177,8 @@ def update():
         filename = url.split("/")[-1]
         r = requests.get(url)
         if(r.status_code == 200):
-            with open(filename, "w") as f:
+            path = os.path.join(CURRENT_PATH, filename)
+            with open(path, "w") as f:
                 f.write(r.text)
                 f.close()
 
